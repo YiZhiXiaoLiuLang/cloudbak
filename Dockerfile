@@ -32,13 +32,13 @@ RUN apt-get update \
 COPY ./backend/requirements.txt ./
 
 # 使用预编译的 wheel 包，避免 ARM 架构编译超时
-RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple --prefer-binary -r requirements.txt
+RUN pip install --no-cache-dir --prefer-binary -r requirements.txt
 
 # 复制剩余代码
 COPY ./backend/ ./
 
 # 安装 pyinstaller 并编译 Python 可执行文件
-RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple pyinstaller \
+RUN pip install --no-cache-dir pyinstaller \
     && pyinstaller --onefile main.py \
     && pyinstaller --onefile user_password_reset.py \
     && pyinstaller --onefile decrypt_db.py
