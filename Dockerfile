@@ -20,19 +20,20 @@ RUN npm run build
 
 # Python 代码编译环境
 FROM python:3.11-slim-bullseye AS builder
-
 WORKDIR /app/backend
 
-# 安装编译依赖
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends gcc build-essential libffi-dev \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    python3-dev \
+    libffi-dev \
+    pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-# 先复制 requirements.txt 并执行安装，利用 Docker 缓存
 COPY ./backend/requirements.txt ./
 
-# 使用预编译的 wheel 包，避免 ARM 架构编译超时
-RUN pip install --no-cache-dir --prefer-binary -r requirements.txt
+RUN python -m pip install --upgrade pip setuptools wheel \
+    && pip install --no-cache-dir --prefer-binary -r requirements.txt
 
 # 复制剩余代码
 COPY ./backend/ ./
