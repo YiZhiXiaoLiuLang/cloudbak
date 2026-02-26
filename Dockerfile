@@ -14,7 +14,7 @@ COPY ./frontend/ ./
 RUN npm run build
 
 # 最终运行环境（ARM32 - 直接运行 Python）
-FROM python:3.11-slim-bullseye
+FROM python:3.9.19-slim-bullseye
 
 WORKDIR /app
 
